@@ -5,6 +5,7 @@ use windows::{
         GlobalSystemMediaTransportControlsSessionMediaProperties,
         GlobalSystemMediaTransportControlsSessionPlaybackStatus,
     },
+    Storage::Streams::{DataReader, IRandomAccessStreamReference},
 };
 
 #[derive(Debug, Clone)]
@@ -136,6 +137,25 @@ impl mediacontroller {
         let session = self.get_session()?;
         let source = session.SourceAppUserModelId()?;
         Ok(source.to_string())
+    }
+
+    pub async fn thumbnail(&self) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+        let session = self.get_session()?;
+        let props = session.TryGetMediaPropertiesAsync()?.await?;
+        let thumbnail_ref: IRandomAccessStreamReference = props.Thumbnail()?;
+        let stream = thumbnail_ref.OpenReadAsync()?.await?;
+        let size = stream.Size()? as u32;
+        let reader = DataReader::CreateDataReader(&stream)?;
+        reader.LoadAsync(size)?.await?;
+        let mut buffer = vec![0u8; size as usize];
+        reader.ReadBytes(&mut buffer)?;
+        Ok(buffer)
+    }
+
+    pub async fn save_thumbnail(&self, path: &str) -> Result<(), Box<dyn std::error::Error>> {
+        let data = self.thumbnail().await?;
+        std::fs::write(path, data)?;
+        Ok(())
     }
 }
 

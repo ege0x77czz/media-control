@@ -86,21 +86,29 @@ async fn main() {
                 Err(e) => eprintln!("error: {}", e),
             }
         }
+        "thumbnail" | "cover" | "art" => {
+            let path = args.get(2).map(|s| s.as_str()).unwrap_or("cover.png");
+            match controller.save_thumbnail(path).await {
+                Ok(_) => println!("saved cover art to {}", path),
+                Err(e) => eprintln!("failed to save cover: {}", e),
+            }
+        }
         _ => {
             println!("media-control - control your tunes from the terminal");
             println!();
-            println!("usage: demo <command>");
+            println!("usage: demo <command> [args]");
             println!();
             println!("commands:");
-            println!("  read      show whats currently playing (default)");
-            println!("  play      resume playback");
-            println!("  pause     pause playback");
-            println!("  toggle    toggle play/pause");
-            println!("  stop      stop playback");
-            println!("  next      skip to next track");
-            println!("  prev      go to previous track");
-            println!("  status    show playback status");
-            println!("  app       show which app is playing");
+            println!("  read            show whats currently playing (default)");
+            println!("  play            resume playback");
+            println!("  pause           pause playback");
+            println!("  toggle          toggle play/pause");
+            println!("  stop            stop playback");
+            println!("  next            skip to next track");
+            println!("  prev            go to previous track");
+            println!("  status          show playback status");
+            println!("  app             show which app is playing");
+            println!("  thumbnail [path] save cover art (default: cover.png)");
         }
     }
 }

@@ -56,6 +56,10 @@ async fn main() {
 
 **app_name()** - returns the app thats playing (spotify, chrome, etc.)
 
+**thumbnail()** - gets the album/cover art as raw bytes
+
+**save_thumbnail(path)** - saves the album/cover art to a file
+
 ### mediainfo
 
 ```rust
@@ -98,7 +102,7 @@ cargo run --example demo status
 
 ## requirements
 
-- windows 10/11
+- windows 10 1909+ / windows 11
 - rust 1.70+
 
 ## license
