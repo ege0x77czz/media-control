@@ -1,0 +1,25 @@
+[package]
+name = "media-control"
+version = "0.1.0"
+edition = "2021"
+authors = ["ege0x77czz <https://github.com/ege0x77czz>"]
+description = "a chill rust library for controlling media playback on windows via winrt"
+license = "MIT"
+repository = "https://github.com/ege0x77czz/media-control"
+keywords = ["media", "windows", "winrt", "control", "music"]
+categories = ["multimedia", "os::windows-apis"]
+
+[dependencies]
+windows = { version = "0.58", features = [
+    "Foundation",
+    "Media_Control",
+    "Storage_Streams",
+] }
+tokio = { version = "1", features = ["rt", "macros"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+
+[[example]]
+name = "demo"
+path = "examples/demo.rs"
